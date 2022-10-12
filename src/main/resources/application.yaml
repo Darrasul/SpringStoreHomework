@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /SpringStore
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+    com:
+      buzas:
+        springstorehomework:
+          controllers: error
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/springStore?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
