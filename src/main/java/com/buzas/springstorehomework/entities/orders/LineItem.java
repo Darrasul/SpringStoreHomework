@@ -48,4 +48,14 @@ public class LineItem {
 
     public LineItem() {
     }
+
+    @Override
+    public String toString() {
+        return "LineItem{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", price=" + price +
+                ", currency='" + currency + '\'' +
+                '}';
+    }
 }

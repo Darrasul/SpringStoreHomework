@@ -26,18 +26,12 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 25)
-    @Size(max = 25, message = "username too long")
-    @NotBlank(message = "specify the username")
     private String username;
 
     @Column(nullable = false, length = 50)
-    @Size(max = 50, message = "password too long")
-    @Size(min = 3, message = "password too short")
     private String password;
 
     @Column(unique = true)
-    @NotBlank
-    @Email
     private String email;
 
     @Column
@@ -56,5 +50,27 @@ public class User {
     private Set<Role> roles;
 
     public User() {
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
+    public void removeOrder(Order order) {
+        orders.remove(order);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", orders=" + orders +
+                ", cart=" + cart +
+                ", roles=" + roles +
+                '}';
     }
 }

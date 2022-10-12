@@ -29,4 +29,13 @@ public class Cart {
 
     public Cart() {
     }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", user=" + user +
+                ", lineItems=" + lineItems +
+                '}';
+    }
 }

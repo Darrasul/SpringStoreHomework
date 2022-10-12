@@ -28,4 +28,26 @@ public class Order {
 
     public Order() {
     }
+
+    public Order(User user, Set<LineItem> lineItems) {
+        this.user = user;
+        this.lineItems = lineItems;
+    }
+
+    public void addToOrder(LineItem item) {
+        lineItems.add(item);
+    }
+
+    public void deleteFromOrder(LineItem item) {
+        lineItems.remove(item);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", user=" + user +
+                ", lineItems=" + lineItems +
+                '}';
+    }
 }
