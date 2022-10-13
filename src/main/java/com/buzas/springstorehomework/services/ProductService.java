@@ -4,6 +4,7 @@ import com.buzas.springstorehomework.entities.products.ProductDto;
 import com.buzas.springstorehomework.entities.products.ProductDtoMapper;
 import com.buzas.springstorehomework.entities.products.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductService {
 
@@ -34,7 +36,16 @@ public class ProductService {
     }
 
     public void save(ProductDto productDto) {
-        productRepo.save(mapper.map(productDto));
+        try {
+            productRepo.save(mapper.map(productDto));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public void update(Long id, ProductDto productDto) {
+        productRepo.updateProduct(id, productDto.getCurrency(),
+                productDto.getDescription(), productDto.getPrice(), productDto.getTitle());
     }
 
     public void deleteById(Long id) {

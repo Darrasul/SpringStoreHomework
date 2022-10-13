@@ -52,22 +52,12 @@ public class User {
     public User() {
     }
 
-    public void addOrder(Order order) {
-        orders.add(order);
-    }
-
-    public void removeOrder(Order order) {
-        orders.remove(order);
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", enabled=" + enabled +
                 ", orders=" + orders +
                 ", cart=" + cart +
                 ", roles=" + roles +

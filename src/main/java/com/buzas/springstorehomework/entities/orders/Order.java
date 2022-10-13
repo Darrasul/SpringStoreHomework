@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,8 @@ public class Order {
                 cascade = CascadeType.MERGE)
     private Set<LineItem> lineItems;
 
+    private BigDecimal totalCost;
+
     public Order() {
     }
 
@@ -34,19 +37,19 @@ public class Order {
         this.lineItems = lineItems;
     }
 
-    public void addToOrder(LineItem item) {
-        lineItems.add(item);
-    }
-
-    public void deleteFromOrder(LineItem item) {
-        lineItems.remove(item);
+//    Явное прописывание из-за расчетов на стороне сервиса: на товар в будущем может действовать скидка, в таком случае
+//    изначальная цена, указанная в БД будет отличаться от реальной, т.к. скидка может быть начислена по разным причинам:
+//    кроме сезонных скидок бывают, к примеру, скидки по купонам
+    public Order(User user, Set<LineItem> lineItems, BigDecimal totalCost) {
+        this.user = user;
+        this.lineItems = lineItems;
+        this.totalCost = totalCost;
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", user=" + user +
                 ", lineItems=" + lineItems +
                 '}';
     }

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,11 +19,11 @@ public class SecurityConfiguration {
 
     @Autowired
     public void authConfig(
-            AuthenticationManagerBuilder authBuilder, UserDetailsServiceImpl userDetailsService
+            AuthenticationManagerBuilder authBuilder, PasswordEncoder encoder, UserDetailsServiceImpl userDetailsService
     ) throws Exception {
         authBuilder.inMemoryAuthentication()
-                .withUser("User")
-                .password("pass")
+                .withUser("Vito")
+                .password(encoder.encode("pass"))
                 .roles("MainAdmin");
 
         authBuilder.userDetailsService(userDetailsService);

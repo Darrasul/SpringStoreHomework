@@ -1,6 +1,7 @@
 package com.buzas.springstorehomework.entities.users;
 
 import com.buzas.springstorehomework.entities.carts.Cart;
+import com.buzas.springstorehomework.entities.orders.Order;
 import com.buzas.springstorehomework.entities.roles.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,8 @@ public class UserDto {
     @Email
     private String email;
 
+    private Set<Order> orders;
+
     private Cart cart;
 
     private Set<Role> roles;
@@ -41,8 +44,8 @@ public class UserDto {
         return "UserDto{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", orders='" + orders + '\'' +
                 ", cart=" + cart +
                 ", roles=" + roles +
                 '}';
