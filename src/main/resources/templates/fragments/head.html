@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav th:fragment="navpanel" class="buttons">
     <a href="#">SpringShop</a>
-    <form th:action="@{/product}" th:method="get">
+    <form th:action="@{/product/api/v1}" th:method="get">
         <button type="submit">Products</button>
     </form>
-    <form th:action="@{/user}" th:method="get">
+    <form th:action="@{/user/api/v1}" th:method="get">
         <button type="submit">Users</button>
     </form>
     <form sec:authorize="isAuthenticated()"

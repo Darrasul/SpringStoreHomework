@@ -14,11 +14,11 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
     @Query(value = """
-                    select * from product p
+                    select * from products p
                     where (:maximumFilter is null or p.price <= :maximumFilter)
                     and (:minimumFilter is null or p.price >= :minimumFilter)
             """, countQuery = """
-                    select count(*) from product p
+                    select count(*) from products p
                     where (:maximumFilter is null or p.price <= :maximumFilter)
                     and (:minimumFilter is null or p.price >= :minimumFilter)
             """, nativeQuery = true
@@ -26,7 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
     Page<Product> findAllByFilters(Double maximumFilter, Double minimumFilter, Pageable pageable);
 
     @Query(value = """
-                    select * from product p
+                    select * from products p
                     where (:maximumFilter is null or p.price <= :maximumFilter)
                     and (:minimumFilter is null or p.price >= :minimumFilter)
             """, nativeQuery = true

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/api/v1")
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {

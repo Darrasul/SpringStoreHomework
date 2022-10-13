@@ -24,7 +24,7 @@ public class SecurityConfiguration {
         authBuilder.inMemoryAuthentication()
                 .withUser("Vito")
                 .password(encoder.encode("pass"))
-                .roles("MainAdmin");
+                .roles("MainAdmin", "Admin", "Manager");
 
         authBuilder.userDetailsService(userDetailsService);
     }
@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toSet());
                         if (auths.contains("ROLE_MainAdmin") || auths.contains("ROLE_Admin")) {
-                            response.sendRedirect("/SpringStore/user/");
+                            response.sendRedirect("/SpringStore/");
                         } else {
                             response.sendRedirect("/SpringStore/");
                         }

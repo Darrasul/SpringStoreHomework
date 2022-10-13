@@ -6,6 +6,79 @@
 </head>
 <nav th:replace="fragments/head.html :: navpanel"></nav>
 <body>
-    <h3>This is product panel</h3>
+    <div align="center">
+        <form>
+            <div>
+                <label for="minimumFilter">Minimum price</label>
+                <input type="text" id="minimumFilter" name="minimumFilter" placeholder="min price"
+                th:value="${param.minimumFilter}">
+            </div>
+            <div>
+                <label for="maximumFilter">Minimum price</label>
+                <input type="text" id="maximumFilter" name="maximumFilter" placeholder="max price"
+                       th:value="${param.maximumFilter}">
+            </div>
+            <button type="submit">Apply Filters</button>
+        </form>
+    </div>
+    <div align="center">
+        <table border="1">
+            <thead>
+            <td>id</td>
+            <td>title</td>
+            <td>price</td>
+            <td>currency</td>
+            <td sec:authorize="hasAnyRole('ROLE_Manager')">buttons</td>
+            </thead>
+            <tbody align="center">
+                <tr th:each="product : ${products}">
+                    <td><span th:text="${product.id}"></span></td>
+                    <td><span th:text="${product.title}"></span></td>
+                    <td><span th:text="${product.price}"></span></td>
+                    <td><span th:text="${product.currency}"></span></td>
+                    <td sec:authorize="hasAnyRole('ROLE_Manager')">
+                        <form action="#" th:action="@{/product/api/v1/} + ${product.id}" method="get">
+                            <input type="hidden" id="id" name="id" th:object="${product.id}">
+                            <button type="submit">Inspect</button>
+                        </form>
+                        <form action="#" th:action="@{/product/api/v1/delete} + ${product.id}" method="post">
+                            <input type="hidden" id="delete_id" name="id" th:object="${product.id}">
+                            <button>Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:unless="${products.isEmpty()}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item" >
+                        <a class="page-link" href="#"
+                           th:href="@{/product/api/v1(minimumFilter=${param.minimumFilter}, maximumFilter=${param.maximumFilter}, page=${products.number}, size=${products.size})}"
+                           th:if="${!products.isFirst} ? 'disabled'">Previous</a>
+                        <a th:if="${!products.isFirst} ? 'active'">This is first page</a>
+                    </li>
+
+                    <li th:each="num : ${#numbers.sequence(1, products.totalPages)}"
+                        th:classapend="${num == products.number + 1} ? 'active'"
+                        class="page-item">
+                        <a class="page-link" href="#" th:href="@{/product/api/v1(minimumFilter=${param.minimumFilter}, maximumFilter=${param.maximumFilter}, page=${num}, size=${products.size})}">[[${num}]]
+                            <span th:if="${num == products.number + 1}">(current)</span>
+                        </a>
+                    </li>
+
+                    <li class="page-item" >
+                        <a class="page-link" href="#"
+                           th:href="@{/product/api/v1(minimumFilter=${param.minimumFilter}, maximumFilter=${param.maximumFilter}, page=${products.number + 2}, size=${products.size})}"
+                           th:if="${!products.isLast} ? 'disabled'">Next</a>
+                        <a th:if="${!products.isLast} ? 'active'">This is last page</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div sec:authorize="hasAnyRole('ROLE_Manager')">
+            <a th:href="@{/product/api/v1/new}">Add new product</a>
+        </div>
+    </div>
 </body>
 </html>
