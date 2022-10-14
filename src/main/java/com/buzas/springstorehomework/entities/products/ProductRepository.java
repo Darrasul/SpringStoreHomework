@@ -16,10 +16,6 @@ import java.util.Optional;
 @Repository
 @Transactional(Transactional.TxType.SUPPORTS)
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
-//  Я в курсе существования изначальных методов findById и deleteById, но, по какой-то причине, после переноса проекта,
-//  они начали выдавать ошибки, ведущие прямиком к CrudRepository. Т.е. по какой-то причине ошибку начали выдавать их методы.
-//    UPD. нашёл ошибку и, убив на нее час, решил обойти пока что простым путем. Ошибка выглядит следующим образом
-//    Failed to introspect Class [org.springframework.data.jpa.repository.support.QuerydslJpaPredicateExecutor] from ClassLoader [jdk.internal.loader.ClassLoaders$AppClassLoader@6f94fa3e]; nested exception is java.lang.IllegalStateException: Failed to introspect Class [org.springframework.data.jpa.repository.support.QuerydslJpaPredicateExecutor] from ClassLoader [jdk.internal.loader.ClassLoaders$AppClassLoader@6f94fa3e]
     @Query(value = """
                     select * from products p
                     where p.id = :id
