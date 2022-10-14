@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>SpringShop</title>
+</head>
+<nav th:replace="fragments/head.html :: navpanel"></nav>
+<body>
+<span>
+    <div>
+    <table cellspacing="5" align="center">
+        <h3 align="center">User</h3>
+        <thead>
+            <td>id</td>
+            <td>name</td>
+            <td>email</td>
+            <td>roles</td>
+        </thead>
+        <tbody>
+        <tr>
+           <td><span th:text="${user.id}"></span></td>
+           <td><span th:text="${user.username}"></span></td>
+           <td><span th:text="${user.email}"></span></td>
+           <td><span th:text="${user.roles}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+        </div>
+    <div>
+    <h1 align="center">Update user</h1>
+        <div th:align="center">
+        <form action="#" th:action="@{new/create}" method="post"
+              th:object="${user}" sec:authorize="hasAnyRole('ROLE_MainAdmin')">
+            <input type="hidden" id="id" name="id" th:field="*{id}">
+            <div>
+               <label for="username">New name</label>
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                <input type="text" id="username" name="username" placeholder="Enter username of the product" th:field="*{username}">
+            </div>
+            <div>
+                <label for="password">New password</label>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                <input type="text" id="password" name="password" placeholder="Enter password of the user" th:field="*{password}">
+            </div>
+            <div>
+                <label for="email">New email</label>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                <input type="email" id="email" name="email" placeholder="Enter email of the user" th:field="*{email}">
+            </div>
+            <div>
+                <label>Roles</label>
+                <select th:field="*{roles}" id="roles" required multiple>
+                    <option th:each="role : ${auth_roles}"
+                            th:text="${role.getName()}" th:value="${role.getId()}"
+                            th:selected="${user.getRoles()?.contains(role)}">
+                    </option>
+                </select>
+            </div>
+        <button type="submit" sec:authorize="hasAnyRole('ROLE_MainAdmin')">Update</button>
+        </form>
+            </div>
+</div>
+</span>
+</body>
+</html>

@@ -6,6 +6,50 @@
 </head>
 <nav th:replace="fragments/head.html :: navpanel"></nav>
 <body>
-    <h3>This is product panel</h3>
+<span>
+    <table cellspacing="5" align="center">
+        <thead>
+            <td>id</td>
+            <td>title</td>
+            <td>description</td>
+            <td>price</td>
+            <td>currency</td>
+        </thead>
+        <tbody>
+        <tr>
+           <td><span th:text="${product.id}"></span></td>
+           <td><span th:text="${product.title}"></span></td>
+           <td><span th:text="${product.description}"></span></td>
+           <td><span th:text="${product.price}"></span></td>
+           <td><span th:text="${product.currency}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+        <form action="#" th:action="@{update/}" method="post" th:object="${product}">
+            <input type="hidden" id="id" name="id" th:field="*{id}">
+            <div>
+               <label for="name">New name</label>
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+                <input type="text" id="name" name="name" placeholder="Enter name of the product" th:field="*{title}">
+            </div>
+            <div>
+               <label for="name">New description</label>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                <input type="text" id="desc" name="desc" placeholder="Enter description of the product" th:field="*{description}">
+            </div>
+            <div>
+                <label for="price">New price</label>
+                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                <input type="text" id="price" name="price" placeholder="Enter price of the product" th:field="*{price}">
+            </div>
+            <div>
+                <label for="currency">New currency</label>
+                <p th:if="${#fields.hasErrors('currency')}" th:errors="*{currency}"></p>
+                <input type="text" id="currency" name="currency" placeholder="Enter currency of the product" th:field="*{currency}">
+            </div>
+        <button type="submit">Update</button>
+        </form>
+
+</span>
 </body>
 </html>

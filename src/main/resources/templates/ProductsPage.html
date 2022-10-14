@@ -38,11 +38,9 @@
                     <td><span th:text="${product.currency}"></span></td>
                     <td sec:authorize="hasAnyRole('ROLE_Manager')">
                         <form action="#" th:action="@{/product/api/v1/} + ${product.id}" method="get">
-                            <input type="hidden" id="id" name="id" th:object="${product.id}">
                             <button type="submit">Inspect</button>
                         </form>
-                        <form action="#" th:action="@{/product/api/v1/delete} + ${product.id}" method="post">
-                            <input type="hidden" id="delete_id" name="id" th:object="${product.id}">
+                        <form action="#" th:action="@{/product/api/v1/delete/} + ${product.id}" method="post">
                             <button>Delete</button>
                         </form>
                     </td>

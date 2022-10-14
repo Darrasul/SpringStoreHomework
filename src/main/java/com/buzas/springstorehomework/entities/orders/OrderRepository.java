@@ -6,12 +6,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
+@Transactional(Transactional.TxType.SUPPORTS)
 public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPredicateExecutor<Order> {
-
+    @Query(value = """
+                        select * from orders o
+                        where o.id = :id
+            """, nativeQuery = true)
+    Optional<Order> findById(Long id);
     @Query(value = """
                         select * from orders o
                         where o.user_id = :id
@@ -21,6 +28,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
     void deleteAllById(Long id);
 
     @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
                         delete from lineitems_orders lo
                         where lo.orders_id = :orderId
@@ -29,6 +37,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
     void deleteFromOrderByOrderIdAndLNId(Long orderId, Long lnId);
 
     @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
                         insert into lineitems_orders (line_items_id, orders_id)
                         values (:lnId, :orderId);
@@ -42,6 +51,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
     BigDecimal showPriceOfLN(Long lnId);
 
     @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
                         update orders
                         set total_cost = total_cost + :additionalPrice
@@ -50,6 +60,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
     int increaseTotalCostOfOrder(Long orderId, BigDecimal additionalPrice);
 
     @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
                         update orders
                         set total_cost = total_cost - :decreasePrice
@@ -58,6 +69,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
     int decreaseTotalCostOfOrder(Long orderId, BigDecimal decreasePrice);
 
     @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
                         insert into users_orders (user_id, orders_id)
                         values (:userId, :orderId)

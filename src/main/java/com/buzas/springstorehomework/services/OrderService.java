@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.FindException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,6 +30,16 @@ public class OrderService {
 
     public List<Order> showAll() {
         return orderRepo.findAll();
+    }
+
+    public Optional<Order> showById(Long id) {
+        return orderRepo.findById(id);
+    }
+
+    public Set<LineItem> showAllFromOrderById (Long id) {
+        return orderRepo.findById(id)
+                .orElseThrow(() -> new FindException("No such order with id:" + id))
+                .getLineItems();
     }
 
     public List<Order> showAllByUserId(Long id) {

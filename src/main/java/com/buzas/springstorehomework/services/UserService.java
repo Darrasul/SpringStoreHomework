@@ -1,6 +1,8 @@
 package com.buzas.springstorehomework.services;
 
 import com.buzas.springstorehomework.entities.orders.Order;
+import com.buzas.springstorehomework.entities.roles.Role;
+import com.buzas.springstorehomework.entities.users.User;
 import com.buzas.springstorehomework.entities.users.UserDto;
 import com.buzas.springstorehomework.entities.users.UserDtoMapper;
 import com.buzas.springstorehomework.entities.users.UserRepository;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.lang.module.FindException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,9 +49,13 @@ public class UserService {
 
     public void save(UserDto userDto) {
         try {
-            userRepo.save(mapper.map(userDto, encoder));
-            userRepo.flush();
-        } catch (OptimisticLockingFailureException e) {
+            userRepo.addUser(userDto.getEmail(), userDto.getPassword(), userDto.getUsername());
+            User user = userRepo.findUserByUsername(userDto.getUsername())
+                    .orElseThrow(() -> new FindException("No such user with username:" + userDto.getUsername()));
+            for (Role role : userDto.getRoles()) {
+                addRoleById(role.getId(), user.getId());
+            }
+        } catch (Exception e) {
             e.fillInStackTrace();
         }
     }
@@ -58,9 +65,7 @@ public class UserService {
     }
 
     public void addRoleById(Long userId, Long roleId) {
-        if (userRepo.existsRoleCheck(userId, roleId) == 0) {
-            userRepo.addUserRolesById(userId, roleId);
-        }
+        userRepo.addUserRolesById(userId, roleId);
     }
 
     public void removeRoleById(Long userId, Long roleId) {

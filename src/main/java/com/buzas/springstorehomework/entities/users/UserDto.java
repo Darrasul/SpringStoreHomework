@@ -39,6 +39,19 @@ public class UserDto {
     public UserDto() {
     }
 
+    public UserDto(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public UserDto(String username, String password, String email, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +

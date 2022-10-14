@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>SpringShop</title>
+</head>
+<nav th:replace="fragments/head.html :: navpanel"></nav>
+<body>
+<div align="center">
+    <table border="1">
+        <thead align="center">
+        <td>id</td>
+        <td>title</td>
+        <td>price</td>
+        <td>currency</td>
+        <td sec:authorize="hasAnyRole('ROLE_User')">buttons</td>
+        </thead>
+        <tbody align="center">
+        <tr th:each="item : ${items}">
+            <td>
+                <span th:text="${item.id}"></span>
+            </td>
+            <td>
+                <span th:text="${item.title}"></span>
+            </td>
+            <td>
+                <span th:text="${item.price}"></span>
+            </td>
+            <td>
+                <span th:text="${item.currency}"></span>
+            </td>
+            <td>
+                <form action="#" th:action="@{deleteItem(orderId=${orderId}, itemId=${item.id})}" method="post">
+                    <button type="submit">delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

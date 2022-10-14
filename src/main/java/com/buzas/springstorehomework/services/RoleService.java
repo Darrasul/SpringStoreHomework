@@ -5,6 +5,7 @@ import com.buzas.springstorehomework.entities.roles.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.FindException;
 import java.util.List;
 
 @Service

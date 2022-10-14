@@ -46,6 +46,13 @@ public class LineItem {
         this.currency = product.getCurrency();
     }
 
+    public LineItem(Long id, String currency, BigDecimal price, String title) {
+        this.id = id;
+        this.currency = currency;
+        this.price = price;
+        this.title = title;
+    }
+
     public LineItem() {
     }
 

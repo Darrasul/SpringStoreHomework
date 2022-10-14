@@ -1,6 +1,5 @@
 package com.buzas.springstorehomework.entities.roles;
 
-import com.buzas.springstorehomework.entities.products.Product;
 import com.buzas.springstorehomework.entities.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

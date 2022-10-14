@@ -6,6 +6,39 @@
 </head>
 <nav th:replace="fragments/head.html :: navpanel"></nav>
 <body>
-    <h3>This is users page</h3>
+<div align="center">
+    <table border="1">
+        <thead align="center">
+        <td>id</td>
+        <td>name</td>
+        <td>authorities</td>
+        <td sec:authorize="hasAnyRole('ROLE_MainAdmin')">buttons</td>
+        </thead>
+        <tbody align="center">
+        <tr th:each="user : ${users}">
+            <td>
+                <span th:text="${user.id}"></span>
+            </td>
+            <td>
+                <span th:text="${user.username}"></span>
+            </td>
+            <td>
+                <span th:text="${user.roles}"></span>
+            </td>
+            <td sec:authorize="hasAnyRole('ROLE_MainAdmin')">
+                <form action="#" th:action="@{/user/api/v1/} + ${user.id}" method="get">
+                    <button type="submit">Inspect</button>
+                </form>
+                <form action="#" th:action="@{/user/api/v1/delete/} + ${user.id}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <a th:href="@{/user/api/v1/new}" sec:authorize="hasAnyRole('ROLE_MainAdmin')">Add new user</a>
+    </div>
+</div>
 </body>
 </html>
