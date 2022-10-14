@@ -1,19 +1,16 @@
 package com.buzas.springstorehomework.services;
 
-import com.buzas.springstorehomework.entities.orders.Order;
 import com.buzas.springstorehomework.entities.roles.Role;
 import com.buzas.springstorehomework.entities.users.User;
 import com.buzas.springstorehomework.entities.users.UserDto;
 import com.buzas.springstorehomework.entities.users.UserDtoMapper;
 import com.buzas.springstorehomework.entities.users.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.lang.module.FindException;
 import java.util.List;
 import java.util.stream.Collectors;

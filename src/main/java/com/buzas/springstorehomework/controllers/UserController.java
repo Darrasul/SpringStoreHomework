@@ -2,9 +2,7 @@ package com.buzas.springstorehomework.controllers;
 
 import com.buzas.springstorehomework.entities.roles.Role;
 import com.buzas.springstorehomework.entities.users.UserDto;
-import com.buzas.springstorehomework.services.OrderService;
-import com.buzas.springstorehomework.services.RoleService;
-import com.buzas.springstorehomework.services.UserService;
+import com.buzas.springstorehomework.services.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
@@ -24,6 +22,8 @@ public class UserController {
     private final UserService userService;
     private final OrderService orderService;
     private final RoleService roleService;
+    private final CartService cartService;
+    private final LNService lnService;
 
     @GetMapping
     public ModelAndView getUsers(Model model) {
@@ -36,6 +36,9 @@ public class UserController {
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("orders", orderService.showAllByUserId(id));
         model.addAttribute("auth_roles", roleService.findAll());
+        Long cartId = cartService.findCartIdByUserId(id);
+        model.addAttribute("cart_id", cartId);
+        model.addAttribute("cart_items", lnService.showAllByCartId(cartId));
         return new ModelAndView("UserPage");
     }
 
@@ -83,5 +86,21 @@ public class UserController {
         }
         userService.save(userDto);
         return new ModelAndView("NewUserPage");
+    }
+
+    @PostMapping("/cart/delete")
+//    @Secured("ROLE_User")
+    public ModelAndView deleteItemFromCart(@RequestParam("cartId") Long cartId,
+                                           @RequestParam("itemId") Long itemId) {
+        cartService.removeProduct(cartId, itemId);
+        return new ModelAndView("UsersPage");
+    }
+// TODO: Добавляет существующий объект, создает несуществующий, но не добавляет и выдает ошибку. Т.е. работает, но с ошибками
+    @PostMapping("/cart/add")
+//    @Secured("ROLE_User")
+    public ModelAndView addItemToCart(@RequestParam("cartId") Long cartId,
+                                      @RequestParam("itemId") Long itemId) {
+        cartService.addProduct(cartId, itemId);
+        return new ModelAndView("UsersPage");
     }
 }

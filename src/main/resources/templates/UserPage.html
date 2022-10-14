@@ -53,6 +53,36 @@
     </table>
         </div>
     <div>
+    <h3 align="center">Cart</h3>
+    <table cellspacing="5" align="center">
+        <thead>
+            <td>id</td>
+            <td>title</td>
+            <td>cost</td>
+            <td>currency</td>
+            <td>actions</td>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cart_items}">
+            <td><span th:text="${item.id}"></span></td>
+            <td><span th:text="${item.title}"></span></td>
+            <td><span th:text="${item.price}"></span></td>
+            <td><span th:text="${item.currency}"></span></td>
+            <td>
+                <form action="#" th:action="@{cart/delete(cartId=${cart_id}, itemId=${item.id})}" method="post">
+                    <button type="submit">delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+        <form action="#" th:action="@{cart/add}" method="post" th:align="center">
+            <input type="text" id="cartId" name="cartId" th:placeholder="*{cart_id}" th:value="cartId">
+            <input type="text" id="itemId" name="itemId" placeholder="itemId" th:value="itemId">
+            <button type="submit">addById</button>
+        </form>
+        </div>
+    <div>
     <h1 align="center">Update user</h1>
         <div th:align="center">
         <form action="#" th:action="@{/user/api/v1/update}" method="post" th:object="${user}" sec:authorize="hasAnyRole('ROLE_MainAdmin')">
