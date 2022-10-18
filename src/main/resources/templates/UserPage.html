@@ -55,14 +55,17 @@
     <div>
     <h3 align="center">Cart</h3>
     <table cellspacing="5" align="center">
-        <thead>
+        <thead align="center">
             <td>id</td>
             <td>title</td>
             <td>cost</td>
             <td>currency</td>
             <td>actions</td>
         </thead>
-        <tbody>
+        <tfoot align="right">
+            <tr><td><span th:text="${total_cost}"></span></td></tr>
+        </tfoot>
+        <tbody align="center">
         <tr th:each="item : ${cart_items}">
             <td><span th:text="${item.id}"></span></td>
             <td><span th:text="${item.title}"></span></td>
@@ -77,11 +80,19 @@
         </tbody>
     </table>
         <form action="#" th:action="@{cart/add}" method="post" th:align="center">
-            <input type="text" id="cartId" name="cartId" th:placeholder="*{cart_id}" th:value="cartId">
+            <input type="text" id="cartId" name="cartId" th:placeholder="${cart_id}" th:value="cartId">
             <input type="text" id="itemId" name="itemId" placeholder="itemId" th:value="itemId">
             <button type="submit">addById</button>
         </form>
         </div>
+    <div>
+        <form action="#" th:action="@{cart/createOrder}" method="post" th:align="center">
+            <input type="hidden" id="createCartCartId" name="cartId" th:value="${cart_id}">
+            <input type="hidden" id="createCartUserId" name="userId" th:value="${user.id}">
+            <input type="hidden" id="createCartTotalCost" name="totalCost" th:value="${total_cost}">
+            <button type="submit">Create an order</button>
+        </form>
+    </div>
     <div>
     <h1 align="center">Update user</h1>
         <div th:align="center">

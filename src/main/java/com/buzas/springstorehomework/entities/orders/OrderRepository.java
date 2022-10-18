@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -75,4 +77,19 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
                         values (:userId, :orderId)
             """, nativeQuery = true)
     int addOrderToUser(Long orderId, Long userId);
+
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                        insert into orders (user_id, total_cost, time)
+                        values (:userId, :totalCost, :timestamp)
+            """, nativeQuery = true)
+    void createOrder(Long userId, BigDecimal totalCost, Timestamp timestamp);
+
+    @Query(value = """
+                        select * from orders o
+                        where o.total_cost = :totalCost
+                        and o.user_id = :id
+            """, nativeQuery = true)
+    Optional<Order> findOrderByTotalCostAndUserId(BigDecimal totalCost, Long id);
 }

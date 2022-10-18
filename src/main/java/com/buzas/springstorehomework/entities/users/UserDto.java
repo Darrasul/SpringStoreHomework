@@ -58,8 +58,6 @@ public class UserDto {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", orders='" + orders + '\'' +
-                ", cart=" + cart +
                 ", roles=" + roles +
                 '}';
     }

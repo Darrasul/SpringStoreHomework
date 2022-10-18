@@ -1,6 +1,5 @@
 package com.buzas.springstorehomework.entities.orders;
 
-import com.buzas.springstorehomework.entities.products.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,7 +37,15 @@ public interface LNRepository extends JpaRepository<LineItem, Long>, QuerydslPre
                     where lo.orders_id = :id
             """, nativeQuery = true
     )
-    Set<LineItem> findAllByOrderId(Long id);
+    Set<LineItem> showSetByOrderId(Long id);
+
+    @Query(value = """
+                    select l.* from lineitems l
+                    inner join lineitems_carts lc on l.id = lc.line_items_id
+                    where lc.carts_id = :id
+            """, nativeQuery = true
+    )
+    Set<LineItem> showSetByCartId(Long id);
     @Query(value = """
                     select * from lineitems l
                     where l.title = :title

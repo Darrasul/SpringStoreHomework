@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -30,8 +31,21 @@ public class LNService {
         return lnRepo.showAllByCartId(id);
     }
 
+    public BigDecimal showTotalCostByCartId(Long id) {
+        List<LineItem> lineItems = lnRepo.showAllByCartId(id);
+        BigDecimal totalCost = BigDecimal.valueOf(0);
+        for (LineItem lineItem : lineItems) {
+            totalCost = totalCost.add(lineItem.getPrice());
+        }
+        return totalCost;
+    }
+
+    public Set<LineItem> showSetFromCartById(Long id) {
+        return lnRepo.showSetByCartId(id);
+    }
+
     public Set<LineItem> showSetFromOrderById(Long id) {
-        return lnRepo.findAllByOrderId(id);
+        return lnRepo.showSetByOrderId(id);
     }
 
     public LineItem findById(Long id) {
