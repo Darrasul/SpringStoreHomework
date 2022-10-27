@@ -48,9 +48,9 @@ public class OrderService {
 
     public void createOrder(Set<LineItem> items, UserDto userDto, BigDecimal totalPrice) {
         try {
-//            Order order =
-            orderRepo.saveAndFlush(new Order(mapper.map(userDto, encoder), items, totalPrice));
-//            orderRepo.addOrderToUser(order.getId(), userDto.getId());
+            Order order =
+                    orderRepo.saveAndFlush(new Order(mapper.map(userDto, encoder), items, totalPrice));
+            orderRepo.addOrderToUser(order.getId(), userDto.getId());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
