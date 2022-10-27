@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -28,6 +29,9 @@ public class Order {
     private Set<LineItem> lineItems;
 
     private BigDecimal totalCost;
+
+    @Column(nullable = false)
+    private Timestamp time;
 
     public Order() {
     }
@@ -51,6 +55,8 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", lineItems=" + lineItems +
+                ", totalCost=" + totalCost +
+                ", time=" + time.getDate() +
                 '}';
     }
 }

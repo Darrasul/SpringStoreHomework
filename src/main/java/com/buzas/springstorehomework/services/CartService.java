@@ -4,7 +4,6 @@ import com.buzas.springstorehomework.entities.carts.Cart;
 import com.buzas.springstorehomework.entities.carts.CartRepository;
 import com.buzas.springstorehomework.entities.orders.LineItem;
 import com.buzas.springstorehomework.entities.products.ProductDto;
-import com.buzas.springstorehomework.entities.users.User;
 import com.buzas.springstorehomework.entities.users.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +31,8 @@ public class CartService {
         if (lnService.checkRightItem(productDto)) {
             cartRepo.addItemToCart(cartId, lnService.findRightItem(productDto).getId());
         } else {
-            lineItem = lnService.createLN(productService.findById(productId).get());
-            cartRepo.addItemToCart(cartId, lineItem.getId());
+            lnService.createLN(productService.findById(productId).get());
+            cartRepo.addItemToCart(cartId, lnService.findRightItem(productDto).getId());
         }
     }
 
@@ -43,7 +42,7 @@ public class CartService {
 
     public void createOrder(Long cartId, Long userId, BigDecimal totalCost) {
         try {
-            Set<LineItem> items = lnService.showSetFromOrderById(cartId);
+            Set<LineItem> items = lnService.showSetFromCartById(cartId);
             UserDto userDto = userService.findById(userId);
             orderService.createOrder(items, userDto, totalCost);
             cartRepo.deleteAllOfItems(cartId);

@@ -8,6 +8,9 @@
     <form th:action="@{/user/api/v1}" th:method="get">
         <button type="submit">Users</button>
     </form>
+    <form th:action="@{/statistic}" th:method="get">
+        <button type="submit">Statistic</button>
+    </form>
     <form sec:authorize="isAuthenticated()"
           th:action="@{/logout}" th:method="post">
         <button>

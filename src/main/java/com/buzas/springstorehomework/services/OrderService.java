@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.module.FindException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,7 +25,6 @@ public class OrderService {
     private final OrderRepository orderRepo;
     private final UserDtoMapper mapper;
     private final PasswordEncoder encoder;
-    @Autowired
     private final UserService userService;
 
     public List<Order> showAll() {
@@ -46,10 +45,19 @@ public class OrderService {
         return orderRepo.showAllByCustomerId(id);
     }
 
+//    Добавил колонку time (TIMESTAMP not null) для более грамотного определения даты создания заказа..
     public void createOrder(Set<LineItem> items, UserDto userDto, BigDecimal totalPrice) {
         try {
-            Order order =
-                    orderRepo.saveAndFlush(new Order(mapper.map(userDto, encoder), items, totalPrice));
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            orderRepo.createOrder(userDto.getId(), totalPrice, timestamp);
+//            TODO: ...но не смог грамотно использовать данные. Установить, почему база, принимая 3:00 значение,
+//             но передает обратно время -3:00
+//            Пока что поиск идет только по цене и id пользователя
+            Order order = orderRepo.findOrderByTotalCostAndUserId(totalPrice, userDto.getId())
+                    .orElseThrow(() -> new FindException("No such order with timestamp: " + timestamp));
+            for (LineItem item : items) {
+                orderRepo.insertIntoOrderByOrderIdAndLNId(item.getId(), order.getId());
+            }
             orderRepo.addOrderToUser(order.getId(), userDto.getId());
         } catch (Exception e) {
             log.error(e.getMessage());

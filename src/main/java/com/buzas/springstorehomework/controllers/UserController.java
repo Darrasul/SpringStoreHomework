@@ -1,6 +1,5 @@
 package com.buzas.springstorehomework.controllers;
 
-import com.buzas.springstorehomework.entities.roles.Role;
 import com.buzas.springstorehomework.entities.users.UserDto;
 import com.buzas.springstorehomework.services.*;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/user/api/v1")
@@ -39,6 +43,7 @@ public class UserController {
         Long cartId = cartService.findCartIdByUserId(id);
         model.addAttribute("cart_id", cartId);
         model.addAttribute("cart_items", lnService.showAllByCartId(cartId));
+        model.addAttribute("total_cost", lnService.showTotalCostByCartId(cartId));
         return new ModelAndView("UserPage");
     }
 
@@ -91,16 +96,31 @@ public class UserController {
     @PostMapping("/cart/delete")
 //    @Secured("ROLE_User")
     public ModelAndView deleteItemFromCart(@RequestParam("cartId") Long cartId,
-                                           @RequestParam("itemId") Long itemId) {
+                                           @RequestParam("itemId") Long itemId,
+                                           Model model) {
+        model.addAttribute("users", userService.findAll());
         cartService.removeProduct(cartId, itemId);
         return new ModelAndView("UsersPage");
     }
-// TODO: Добавляет существующий объект, создает несуществующий, но не добавляет и выдает ошибку. Т.е. работает, но с ошибками
+
     @PostMapping("/cart/add")
 //    @Secured("ROLE_User")
     public ModelAndView addItemToCart(@RequestParam("cartId") Long cartId,
-                                      @RequestParam("itemId") Long itemId) {
+                                      @RequestParam("itemId") Long itemId,
+                                      Model model) {
+        model.addAttribute("users", userService.findAll());
         cartService.addProduct(cartId, itemId);
+        return new ModelAndView("UsersPage");
+    }
+
+    @PostMapping("/cart/createOrder")
+//    @Secured("ROLE_User")
+    public ModelAndView createOrder(@RequestParam("cartId") Long cartId,
+                                    @RequestParam("userId") Long userId,
+                                    @RequestParam("totalCost") BigDecimal totalCost,
+                                    Model model) {
+        cartService.createOrder(cartId, userId, totalCost);
+        model.addAttribute("users", userService.findAll());
         return new ModelAndView("UsersPage");
     }
 }
