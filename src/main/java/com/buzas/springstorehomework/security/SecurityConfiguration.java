@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                     authorizeRequests()
                     .antMatchers("/**/*.css", "/**/*.js").permitAll()
                     .antMatchers("/").permitAll()
+                    .antMatchers("/ws/**").permitAll()
                     .antMatchers("/user/**").hasAnyRole("MainAdmin", "Admin")
                     .antMatchers("/**").hasAnyRole("MainAdmin", "Admin", "Manager", "User")
                     .and()

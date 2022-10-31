@@ -62,4 +62,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
             """, nativeQuery = true)
     int updateProduct(Long productId, String currency,
                       String desc, BigDecimal price, String title);
+
+    @Query(value = """
+                    select * from products p
+            """, nativeQuery = true
+    )
+    List<Product> findAllForWeb();
 }
