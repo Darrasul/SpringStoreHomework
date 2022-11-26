@@ -7,15 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/user/api/v1")
@@ -49,12 +46,20 @@ public class UserController {
 
     @PostMapping("/update")
     public ModelAndView updateUser(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+        checkUserForErrors(userDto, result);
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             return new ModelAndView("UserPage");
         }
         userService.update(userDto, userDto.getId());
         return new ModelAndView("UserPage");
+    }
+
+    @PostMapping("/delete/{id}")
+    public ModelAndView deleteUser(@PathVariable("id") long id, Model model) {
+        userService.deleteById(id);
+        model.addAttribute("users", userService.findAll());
+        return new ModelAndView("UsersPage");
     }
 
     @GetMapping("/order/{id}")
@@ -85,6 +90,7 @@ public class UserController {
     @PostMapping("/new/create")
     @Secured("ROLE_MainAdmin")
     public ModelAndView createNewUser(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+        checkUserForErrors(userDto, result);
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             return new ModelAndView("NewUserPage");
@@ -122,5 +128,28 @@ public class UserController {
         cartService.createOrder(cartId, userId, totalCost);
         model.addAttribute("users", userService.findAll());
         return new ModelAndView("UsersPage");
+    }
+
+    private void checkUserForErrors(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result) {
+        if (userDto.getUsername().isBlank()) {
+            result.addError(new FieldError(userDto.getClass().toString(), "username",
+                    "Specify a username"));
+        } else if (userDto.getUsername().length() > 25) {
+            result.addError(new FieldError(userDto.getClass().toString(), "username",
+                    "Username must be shorter than 25 characters"));
+        }
+
+        if (userDto.getPassword().isBlank()) {
+            result.addError(new FieldError(userDto.getClass().toString(), "password",
+                    "Specify a password"));
+        } else if (userDto.getPassword().length() < 3 || userDto.getPassword().length() > 50) {
+            result.addError(new FieldError(userDto.getClass().toString(), "password",
+                    "Password must be longer than 3 characters shorter than 50 characters"));
+        }
+
+        if (userDto.getEmail().isBlank()) {
+            result.addError(new FieldError(userDto.getClass().toString(), "email",
+                    "Specify an email"));
+        }
     }
 }
