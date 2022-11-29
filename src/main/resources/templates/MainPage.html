@@ -6,6 +6,26 @@
 </head>
 <nav th:replace="fragments/head.html :: navpanel"></nav>
 <body>
-    <h3>This is empty page</h3>
+    <div align="center">
+        <table>
+            <tbody align="center">
+            <tr th:each="item : ${news}">
+                <td><span th:text="${item.title}"></span></td>
+                <td><span th:text="${item.text}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div sec:authorize="hasAnyRole('ROLE_Manager')">
+        <form action="#" th:action="@{/}" method="post" th:object="${item}">
+            <label for="title">New title</label>
+            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+            <input type="text" id="title" name="title" placeholder="Enter the title" th:field="*{title}">
+            <label for="text">New text</label>
+            <p th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></p>
+            <input type="text" id="text" name="text" placeholder="Enter the text" th:field="*{text}">
+            <button type="submit">Add</button>
+        </form>
+    </div>
 </body>
 </html>
