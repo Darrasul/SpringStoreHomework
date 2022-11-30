@@ -39,7 +39,7 @@ public class CartService {
             cartRepo.addItemToCart(cartId, lnService.findRightItem(productDto).getId());
         }
     }
-// ##
+
     public void removeProduct(Long cartId, Long productId) {
         if (cartRepo.showAmountOfItemInTheCart(cartId, productId) > 1) {
             cartRepo.decreaseAmountOfItemFromCart(cartId, productId);
@@ -47,7 +47,7 @@ public class CartService {
             cartRepo.deleteItemFromCart(cartId, productId);
         }
     }
-// ##
+
     public void createOrder(Long cartId, Long userId, BigDecimal totalCost) {
         try {
             Set<LineItem> items = lnService.showSetFromCartById(cartId);
@@ -58,14 +58,14 @@ public class CartService {
             log.error(e.getMessage());
         }
     }
-// ##
+
     public Long findCartIdByUserId(Long id) {
         if (cartRepo.findIdOfTheCartByUserId(id) == null){
             cartRepo.createCart(id);
         }
         return cartRepo.findIdOfTheCartByUserId(id);
     }
-// ##
+
     public Optional<Cart> findCartByUserId(Long id) {
         return cartRepo.findById(cartRepo.findIdOfTheCartByUserId(id));
     }

@@ -30,7 +30,7 @@ public interface CartRepository extends JpaRepository<Cart, Long>, QuerydslPredi
                         values (:userId)
 """, nativeQuery = true)
     void createCart(Long userId);
-// ##
+
     @Modifying
     @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
@@ -40,7 +40,7 @@ public interface CartRepository extends JpaRepository<Cart, Long>, QuerydslPredi
                         and lc.line_items_id = :itemId
 """, nativeQuery = true)
     void decreaseAmountOfItemFromCart(Long cartId, Long itemId);
-// ##
+
     @Modifying
     @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
@@ -50,14 +50,14 @@ public interface CartRepository extends JpaRepository<Cart, Long>, QuerydslPredi
                         and lc.line_items_id = :itemId
 """, nativeQuery = true)
     void increaseAmountOfItemFromCart(Long cartId, Long itemId);
-// ##
+
     @Query(value = """
                         select lc.amount from lineitems_carts lc
                         where lc.line_items_id = :itemId
                         and lc.carts_id = :cartId
 """, nativeQuery = true)
     int showAmountOfItemInTheCart(Long cartId, Long itemId);
-// ##
+
     @Modifying
     @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
