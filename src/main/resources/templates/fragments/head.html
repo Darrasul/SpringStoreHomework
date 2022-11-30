@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav th:fragment="navpanel" class="buttons">
-    <a href="#">SpringShop</a>
+    <a th:href="@{/}">SpringShop</a>
     <form th:action="@{/product/api/v1}" th:method="get">
         <button type="submit">Products</button>
     </form>

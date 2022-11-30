@@ -37,15 +37,15 @@ public interface OrderRepository extends JpaRepository<Order, Long>, QuerydslPre
                         and lo.line_items_id = :lnId
             """, nativeQuery = true)
     void deleteFromOrderByOrderIdAndLNId(Long orderId, Long lnId);
-
+// ##
     @Modifying
     @Transactional(Transactional.TxType.REQUIRED)
     @Query(value = """
-                        insert into lineitems_orders (line_items_id, orders_id)
-                        values (:lnId, :orderId);
+                        insert into lineitems_orders (line_items_id, orders_id, amount)
+                        values (:lnId, :orderId, :amount);
             """, nativeQuery = true)
-    void insertIntoOrderByOrderIdAndLNId(Long lnId, Long orderId);
-
+    void insertIntoOrderByOrderIdAndLNId(Long lnId, Long orderId, int amount);
+// ##
     @Query(value = """
                         select l.price from lineitems l
                         where id = :lnId
