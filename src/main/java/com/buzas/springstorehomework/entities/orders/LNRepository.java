@@ -63,4 +63,12 @@ public interface LNRepository extends JpaRepository<LineItem, Long>, QuerydslPre
                     (:currency, :price, :title, :productId)
 """, nativeQuery = true)
     void addLN(String currency, BigDecimal price, String title, Long productId);
+
+    @Query(value = """
+                    select count(*) from lineitems_carts lc
+                    where lc.carts_id = :cartId
+                    and lc.line_items_id = :itemId
+""", nativeQuery = true)
+    int findItemByItemIdAndCartId(Long itemId, Long cartId);
+
 }

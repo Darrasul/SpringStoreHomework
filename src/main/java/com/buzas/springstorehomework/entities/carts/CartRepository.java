@@ -22,6 +22,41 @@ public interface CartRepository extends JpaRepository<Cart, Long>, QuerydslPredi
                         values (:cartId, :itemId)
 """, nativeQuery = true)
     void addItemToCart(Long cartId, Long itemId);
+// ##
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                        insert into carts (user_id)
+                        values (:userId)
+""", nativeQuery = true)
+    void createCart(Long userId);
+
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                        update lineitems_carts lc
+                        set lc.amount = (lc.amount - 1)
+                        where lc.carts_id = :cartId
+                        and lc.line_items_id = :itemId
+""", nativeQuery = true)
+    void decreaseAmountOfItemFromCart(Long cartId, Long itemId);
+
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                        update lineitems_carts lc
+                        set lc.amount = (lc.amount + 1)
+                        where lc.carts_id = :cartId
+                        and lc.line_items_id = :itemId
+""", nativeQuery = true)
+    void increaseAmountOfItemFromCart(Long cartId, Long itemId);
+
+    @Query(value = """
+                        select lc.amount from lineitems_carts lc
+                        where lc.line_items_id = :itemId
+                        and lc.carts_id = :cartId
+""", nativeQuery = true)
+    int showAmountOfItemInTheCart(Long cartId, Long itemId);
 
     @Modifying
     @Transactional(Transactional.TxType.REQUIRED)

@@ -13,6 +13,7 @@
         <td>title</td>
         <td>price</td>
         <td>currency</td>
+        <td>amount</td>
         <td sec:authorize="hasAnyRole('ROLE_User')">buttons</td>
         </thead>
         <tbody align="center">
@@ -28,6 +29,9 @@
             </td>
             <td>
                 <span th:text="${item.currency}"></span>
+            </td>
+            <td>
+                <span th:text="${item.amount}"></span>
             </td>
             <td>
                 <form action="#" th:action="@{deleteItem(orderId=${orderId}, itemId=${item.id})}" method="post">

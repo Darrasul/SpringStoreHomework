@@ -39,6 +39,8 @@ public class LineItem {
     @ManyToMany
     private Set<Cart> carts;
 
+    private int amount;
+
     public LineItem(Product product) {
         this.product = product;
         this.title = product.getTitle();

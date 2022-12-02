@@ -60,6 +60,7 @@
             <td>title</td>
             <td>cost</td>
             <td>currency</td>
+            <td>amount</td>
             <td>actions</td>
         </thead>
         <tfoot align="right">
@@ -71,6 +72,7 @@
             <td><span th:text="${item.title}"></span></td>
             <td><span th:text="${item.price}"></span></td>
             <td><span th:text="${item.currency}"></span></td>
+            <td><span th:text="${item.amount}"></span></td>
             <td>
                 <form action="#" th:action="@{cart/delete(cartId=${cart_id}, itemId=${item.id})}" method="post">
                     <button type="submit">delete</button>
@@ -80,7 +82,7 @@
         </tbody>
     </table>
         <form action="#" th:action="@{cart/add}" method="post" th:align="center">
-            <input type="text" id="cartId" name="cartId" th:placeholder="${cart_id}" th:value="cartId">
+            <input type="text" id="cartId" name="cartId" th:placeholder="${cart_id}" th:value="${cart_id}">
             <input type="text" id="itemId" name="itemId" placeholder="itemId" th:value="itemId">
             <button type="submit">addById</button>
         </form>

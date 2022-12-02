@@ -56,19 +56,17 @@ public class OrderService {
             Order order = orderRepo.findOrderByTotalCostAndUserId(totalPrice, userDto.getId())
                     .orElseThrow(() -> new FindException("No such order with timestamp: " + timestamp));
             for (LineItem item : items) {
-                orderRepo.insertIntoOrderByOrderIdAndLNId(item.getId(), order.getId());
+                orderRepo.insertIntoOrderByOrderIdAndLNId(item.getId(), order.getId(), item.getAmount());
             }
             orderRepo.addOrderToUser(order.getId(), userDto.getId());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
-
-    public void addToOrder(Long lnId, Long orderId) {
-        orderRepo.insertIntoOrderByOrderIdAndLNId(lnId, orderId);
+    public void addToOrder(Long lnId, Long orderId, int amount) {
+        orderRepo.insertIntoOrderByOrderIdAndLNId(lnId, orderId, amount);
         orderRepo.increaseTotalCostOfOrder(orderId, orderRepo.showPriceOfLN(lnId));
     }
-
     public void removeFromOrder(Long lnId, Long orderId) {
         orderRepo.deleteFromOrderByOrderIdAndLNId(orderId, lnId);
         orderRepo.decreaseTotalCostOfOrder(orderId, orderRepo.showPriceOfLN(lnId));

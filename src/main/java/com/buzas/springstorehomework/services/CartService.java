@@ -25,11 +25,15 @@ public class CartService {
     private final LNService lnService;
 
     public void addProduct(Long cartId, Long productId) {
-        LineItem lineItem;
         ProductDto productDto = productService.findById(productId).orElseThrow(()
                 -> new FindException("No such product with id:" + productId));
         if (lnService.checkRightItem(productDto)) {
-            cartRepo.addItemToCart(cartId, lnService.findRightItem(productDto).getId());
+            Long itemId = lnService.findRightItem(productDto).getId();
+            if (lnService.checkIfItemExistsInCart(itemId, cartId)) {
+                cartRepo.increaseAmountOfItemFromCart(cartId, itemId);
+            } else {
+                cartRepo.addItemToCart(cartId, itemId);
+            }
         } else {
             lnService.createLN(productService.findById(productId).get());
             cartRepo.addItemToCart(cartId, lnService.findRightItem(productDto).getId());
@@ -37,7 +41,11 @@ public class CartService {
     }
 
     public void removeProduct(Long cartId, Long productId) {
-        cartRepo.deleteItemFromCart(cartId, productId);
+        if (cartRepo.showAmountOfItemInTheCart(cartId, productId) > 1) {
+            cartRepo.decreaseAmountOfItemFromCart(cartId, productId);
+        } else {
+            cartRepo.deleteItemFromCart(cartId, productId);
+        }
     }
 
     public void createOrder(Long cartId, Long userId, BigDecimal totalCost) {
@@ -52,6 +60,9 @@ public class CartService {
     }
 
     public Long findCartIdByUserId(Long id) {
+        if (cartRepo.findIdOfTheCartByUserId(id) == null){
+            cartRepo.createCart(id);
+        }
         return cartRepo.findIdOfTheCartByUserId(id);
     }
 
