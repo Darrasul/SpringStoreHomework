@@ -7,6 +7,7 @@
 <nav th:replace="fragments/head.html :: navpanel"></nav>
 <body>
 <span>
+    <div align="center">
     <table cellspacing="5" align="center">
         <thead>
             <td>id</td>
@@ -25,7 +26,7 @@
         </tr>
         </tbody>
     </table>
-        <form action="#" th:action="@{update/}" method="post" th:object="${product}">
+        <form action="#" th:action="@{update/}" method="post" th:object="${product}" sec:authorize="hasAnyRole('ROLE_Manager')">
             <input type="hidden" id="id" name="id" th:field="*{id}">
             <div>
                <label for="name">New name</label>
@@ -49,7 +50,38 @@
             </div>
         <button type="submit">Update</button>
         </form>
-
+    <table>
+        <thead>
+            <td>id</td>
+            <td>username</td>
+            <td>text</td>
+            <td>date</td>
+            <td sec:authorize="hasAnyRole('ROLE_Manager')">buttons</td>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}">
+            <td><span th:text="${comment.id}"></span></td>
+            <td><span th:text="${comment.username}"></span></td>
+            <td><span th:text="${comment.text}"></span></td>
+            <td><span th:text="${comment.date}"></span></td>
+            <td sec:authorize="hasAnyRole('ROLE_Manager')">
+                <form th:action="@{/product/api/v1/comment/delete(id=${comment.id}, productId=${productId})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <form method="post" th:action="@{/product/api/v1/comment/add(text=*{newComment.text}, username=*{newComment.username}, productId=${productId})}">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter username" th:field="*{newComment.username}">
+            <label for="text">Text</label>
+            <input type="text" id="text" name="text" placeholder="Enter comment" th:field="*{newComment.text}">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    </div>
 </span>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.buzas.springstorehomework.entities.products;
 
+import com.buzas.springstorehomework.entities.comments.Comment;
 import com.buzas.springstorehomework.entities.orders.LineItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,10 @@ public class Product {
     @OneToMany(mappedBy = "product",
                 cascade = CascadeType.ALL)
     private Set<LineItem> lineItems;
+
+    @OneToMany(mappedBy = "product",
+                cascade = CascadeType.ALL)
+    private Set<Comment> comments;
 
     public Product() {
     }
