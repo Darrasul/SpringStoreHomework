@@ -41,6 +41,15 @@ public class Product {
                 cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
+    @Column
+    private int cartAddCount;
+
+    @Column
+    private int orderCount;
+
+    @Column
+    private int viewCount;
+
     public Product() {
     }
 

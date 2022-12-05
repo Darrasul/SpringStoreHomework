@@ -31,6 +31,7 @@ public class ProductService {
     }
 
     public Optional<ProductDto> findById(Long id) {
+        increaseViewCountByProductId(id);
         return productRepo.findById(id)
                 .map(mapper::map);
     }
@@ -46,6 +47,18 @@ public class ProductService {
     public void update(Long id, ProductDto productDto) {
         productRepo.updateProduct(id, productDto.getCurrency(),
                 productDto.getDescription(), productDto.getPrice(), productDto.getTitle());
+    }
+
+    public void increaseCartAddCountByProductId(Long id) {
+        productRepo.increaseCartAddCountByProductId(id);
+    }
+
+    public void increaseOrderCountByProductId(Long id, int count) {
+        productRepo.increaseOrderCountByProductId(id, count);
+    }
+
+    public void increaseViewCountByProductId(Long id) {
+        productRepo.increaseViewCountByProductId(id);
     }
 
     public void deleteById(Long id) {

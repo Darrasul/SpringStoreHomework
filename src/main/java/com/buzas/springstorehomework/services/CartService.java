@@ -31,12 +31,16 @@ public class CartService {
             Long itemId = lnService.findRightItem(productDto).getId();
             if (lnService.checkIfItemExistsInCart(itemId, cartId)) {
                 cartRepo.increaseAmountOfItemFromCart(cartId, itemId);
+                productService.increaseCartAddCountByProductId(productId);
             } else {
                 cartRepo.addItemToCart(cartId, itemId);
+                productService.increaseCartAddCountByProductId(productId);
             }
         } else {
             lnService.createLN(productService.findById(productId).get());
-            cartRepo.addItemToCart(cartId, lnService.findRightItem(productDto).getId());
+            Long itemId = lnService.findRightItem(productDto).getId();
+            cartRepo.addItemToCart(cartId, itemId);
+            productService.increaseCartAddCountByProductId(productId);
         }
     }
 

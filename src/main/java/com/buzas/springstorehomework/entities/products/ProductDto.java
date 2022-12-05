@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -36,6 +37,12 @@ public class ProductDto {
     private String currency;
 
     private Set<LineItem> lineItems;
+
+    private int cartAddCount;
+
+    private int orderCount;
+
+    private int viewCount;
 
     public ProductDto() {
     }
