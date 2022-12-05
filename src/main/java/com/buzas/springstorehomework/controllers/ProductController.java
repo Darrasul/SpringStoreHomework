@@ -1,6 +1,8 @@
 package com.buzas.springstorehomework.controllers;
 
+import com.buzas.springstorehomework.entities.comments.Comment;
 import com.buzas.springstorehomework.entities.products.ProductDto;
+import com.buzas.springstorehomework.services.CommentService;
 import com.buzas.springstorehomework.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class ProductController {
 
     private final ProductService productService;
+    private final CommentService commentService;
 
     @GetMapping()
     public ModelAndView getAllProduct(@RequestParam(required = false) Double minimumFilter,
@@ -42,7 +45,31 @@ public class ProductController {
     public ModelAndView getProduct(@PathVariable("id") long id, Model model) {
         model.addAttribute("product", productService.findById(id).orElseThrow(() ->
                 new FindException("No such product")));
+        model.addAttribute("comments", commentService.showCommentByProductId(id));
+        model.addAttribute("productId", id);
+        model.addAttribute("newComment", new Comment());
         return new ModelAndView("ProductPage");
+    }
+
+    @PostMapping("/comment/add")
+    public ModelAndView addComment(@RequestParam String text, @RequestParam String username,
+                                   @RequestParam Long productId, Model model) {
+        commentService.addComment(text.substring(1), username.substring(1), productId);
+        int currentPage = 1 - 1;
+        int sizeValue = 10;
+        Page<ProductDto> dtoPage = productService.findAllByFilters(null, null, currentPage, sizeValue);
+        model.addAttribute("products", dtoPage);
+        return new ModelAndView("ProductsPage");
+    }
+
+    @PostMapping("/comment/delete")
+    public ModelAndView deleteComment(@RequestParam Long id, @RequestParam Long productId, Model model) {
+        commentService.deleteCommentById(id);
+        int currentPage = 1 - 1;
+        int sizeValue = 10;
+        Page<ProductDto> dtoPage = productService.findAllByFilters(null, null, currentPage, sizeValue);
+        model.addAttribute("products", dtoPage);
+        return new ModelAndView("ProductsPage");
     }
 
     @PostMapping("/update")
