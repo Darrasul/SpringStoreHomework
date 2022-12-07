@@ -68,4 +68,31 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
             """, nativeQuery = true
     )
     List<Product> findAllForWeb();
+
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                    update products p
+                    set p.cart_add_count = (p.cart_add_count + 1)
+                    where p.id = :id
+            """, nativeQuery = true)
+    int increaseCartAddCountByProductId(Long id);
+
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                    update products p
+                    set p.order_count = (p.order_count + :count)
+                    where p.id = :id
+            """, nativeQuery = true)
+    int increaseOrderCountByProductId(Long id, int count);
+
+    @Modifying
+    @Transactional(Transactional.TxType.REQUIRED)
+    @Query(value = """
+                    update products p
+                    set p.view_count = (p.view_count + 1)
+                    where p.id = :id
+            """, nativeQuery = true)
+    int increaseViewCountByProductId(Long id);
 }

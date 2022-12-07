@@ -26,6 +26,23 @@
         </tr>
         </tbody>
     </table>
+        <h2 sec:authorize="hasAnyRole('ROLE_Manager')">Statistic</h2>
+    <table sec:authorize="hasAnyRole('ROLE_Manager')">
+        <thead>
+        <tr>
+            <td>Views</td>
+            <td>Adds to cart</td>
+            <td>Orders count</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><span th:text="${product.viewCount}"></span></td>
+            <td><span th:text="${product.cartAddCount}"></span></td>
+            <td><span th:text="${product.orderCount}"></span></td>
+        </tr>
+        </tbody>
+    </table>
         <form action="#" th:action="@{update/}" method="post" th:object="${product}" sec:authorize="hasAnyRole('ROLE_Manager')">
             <input type="hidden" id="id" name="id" th:field="*{id}">
             <div>

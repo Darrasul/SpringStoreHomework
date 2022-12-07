@@ -26,6 +26,7 @@ public class OrderService {
     private final UserDtoMapper mapper;
     private final PasswordEncoder encoder;
     private final UserService userService;
+    private final ProductService productService;
 
     public List<Order> showAll() {
         return orderRepo.findAll();
@@ -57,6 +58,7 @@ public class OrderService {
                     .orElseThrow(() -> new FindException("No such order with timestamp: " + timestamp));
             for (LineItem item : items) {
                 orderRepo.insertIntoOrderByOrderIdAndLNId(item.getId(), order.getId(), item.getAmount());
+                productService.increaseOrderCountByProductId(item.getProduct().getId(), item.getAmount());
             }
             orderRepo.addOrderToUser(order.getId(), userDto.getId());
         } catch (Exception e) {
